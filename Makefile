@@ -4,7 +4,7 @@ STRIP ?= strip
 
 TARGET_SYSROOT ?= $(shell xcrun -sdk iphoneos --show-sdk-path)
 
-CFLAGS  += -Os -isysroot $(TARGET_SYSROOT) -miphoneos-version-min=14.0 -arch arm64
+CFLAGS  += -Os -isysroot $(TARGET_SYSROOT) -miphoneos-version-min=14.0 -arch arm64 -framework CoreFoundation -framework IOKit
 LDLFAGS += -lSystem
 
 all: $(PROGS)

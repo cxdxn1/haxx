@@ -1,3 +1,18 @@
+# Safer Haxx
+
+This fork checks the boot-args nvram variable before running any binaries. If the `no_untether` boot-arg is found, it execve's into launchd.
+To disable any untether binaries and straight up run the original launchd, go into the recovery shell (`irecovery -s`) and type:
+
+- setenv boot-args no_untether
+- saveenv
+- reboot 
+
+Once you're back in recovery, run `irecovery -n`. You'll reboot into regular iOS (if nothing else is broken).
+
+Logic taken from Fugu14.
+
+----
+
 # haxx
 
 Untethered + Unsandboxed code execution haxx as root on iOS 14 - iOS 14.8.1.
