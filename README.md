@@ -1,4 +1,4 @@
-# Safer Haxx
+# More Safer Haxx
 
 This fork checks the boot-args nvram variable before running any binaries. If the `no_untether` boot-arg is found, it execve's into launchd.
 To disable any untether binaries and straight up run the original launchd, go into the recovery shell (`irecovery -s`) and type:
