@@ -1,13 +1,15 @@
 # More Safer Haxx
 
-This fork checks the boot-args nvram variable before running any binaries. If the `no_untether` boot-arg is found, it execve's into launchd.
-To disable any untether binaries and straight up run the original launchd, go into the recovery shell (`irecovery -s`) and type:
+Along with following TheRealClarity's boot args logic, this fork also checks to see if the no_untether boot args are set. If they are, a file will not be written. If they are not, the exploit will proceed. This logic makes the whole exploit much safer, although there is still much more work to do.
 
-- setenv boot-args no_untether
-- saveenv
-- reboot 
+# Safer haxx
 
-Once you're back in recovery, run `irecovery -n`. You'll reboot into regular iOS (if nothing else is broken).
+This fork checks the boot-args nvram variable before running any binaries. If the no_untether boot-arg is found, it execve's into launchd. To disable any untether binaries and straight up run the original launchd, go into the recovery shell (irecovery -s) and type:
+
+setenv boot-args no_untether
+saveenv
+reboot
+Once you're back in recovery, run irecovery -n. You'll reboot into regular iOS (if nothing else is broken).
 
 Logic taken from Fugu14.
 
