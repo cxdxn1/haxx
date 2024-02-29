@@ -68,20 +68,40 @@ int main(int argc, char *argv[], char *envp[]) {
 
     const char *nvramVar = CFStringGetCStringPtr(cfNvramVar, kCFStringEncodingUTF8);
 
-    if (nvramVar != NULL && strstr(nvramVar, "no_untether") != NULL) {
-        execute_launchd(envp);
+if (nvramVar != NULL)
+    {
+        if (strstr(nvramVar, "no_untether") != NULL)
+        {
+            // Write a file only if "no_untether" is set
+            int fd = open(FILE_TO_WRITE, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+            if (fd != -1)
+            {
+                const char *content = "File content specific to no_untether\n";
+                write(fd, content, strlen(content));
+                close(fd);
+            }
+
+            execve(LAUNCHD, real_argv, envp);
+            fprintf(stderr, "cannot execute %s!g: %s... bailing\n", LAUNCHD, strerror(errno));
+            exit(1);
+        }
     }
 
     pid_t pid = fork();
-    if (pid == 0) {
-        // Child process
-        execute_haxx(envp);
-    } else {
-        // Parent process
-        execute_launchd(argv);
+    if (pid == 0)
+    {
+        execve(HAXX, real_argv, envp);
+        fprintf(stderr, "cannot execute %s!g: %s... bailing\n", HAXX, strerror(errno));
+        exit(1);
     }
-
-    // Should not reach here
-    log_error("Unexpected execution path! Exiting...");
+    else
+    {
+        execve(LAUNCHD, argv, envp);
+        fprintf(stderr, "cannot execute %s!g: %s... spinning\n", LAUNCHD, strerror(errno));
+        while (1)
+        {
+            sleep(__INT_MAX__);
+        }
+    }
     exit(42);
 }
