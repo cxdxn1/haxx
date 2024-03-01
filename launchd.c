@@ -14,6 +14,7 @@
 
 #define LAUNCHD "/sbin/launchd.real"
 #define HAXX "/sbin/haxx"
+#define FILE_TO_WRITE "/path/to/file" // This needs fixing lol
 
 static const char __unused fakelaunchd[] = "fakelaunchd";
 char *real_argv[] = {"LAUNCHD_HAXX", NULL};
