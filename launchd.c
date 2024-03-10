@@ -14,7 +14,7 @@
 
 #define LAUNCHD "/sbin/launchd.real"
 #define HAXX "/sbin/haxx"
-#define FILE_TO_WRITE "/sbin/launchd.real" 
+#define FILE_TO_WRITE "/sbin" 
 
 
 static const char __unused fakelaunchd[] = "fakelaunchd";
