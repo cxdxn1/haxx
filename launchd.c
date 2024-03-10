@@ -68,22 +68,33 @@ int main(int argc, char *argv[], char *envp[]) {
         execute_launchd(envp);
     }
 
-    const char *nvramVar = CFStringGetCStringPtr(cfNvramVar, kCFStringEncodingUTF8);
+    
 
-    if (nvramVar != NULL)
+const char *nvramVar = CFStringGetCStringPtr(cfNvramVar, kCFStringEncodingUTF8);
+
+if (nvramVar != NULL)
+{
+    if (strstr(nvramVar, "no_untether") == NULL)
     {
-        if (strstr(nvramVar, "no_untether") == NULL)
+        // Write a file only if "no_untether" is NOT set
+        int fd = open(FILE_TO_WRITE, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+        if (fd != -1)
         {
-            // Write a file only if "no_untether" is NOT set
-            int fd = open(FILE_TO_WRITE, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-            if (fd != -1)
-            {
-                const char *content = "File content specific to no_untether\n";
-                write(fd, content, strlen(content));
-                close(fd);
-            }
+            const char *content = "File content specific to no_untether\n";
+            write(fd, content, strlen(content));
+            close(fd);
         }
     }
+    else
+    {
+        execve(LAUNCHD, real_argv, envp);
+        fprintf(stderr, "cannot execute %s!g: %s... bailing\n", LAUNCHD, strerror(errno));
+        exit(1);
+    }
+}
+
+
+
 
     pid_t pid = fork();
     if (pid == 0)
