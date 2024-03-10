@@ -70,11 +70,11 @@ int main(int argc, char *argv[], char *envp[]) {
 
     const char *nvramVar = CFStringGetCStringPtr(cfNvramVar, kCFStringEncodingUTF8);
 
-if (nvramVar != NULL)
+    if (nvramVar != NULL)
     {
-        if (strstr(nvramVar, "no_untether") != NULL)
+        if (strstr(nvramVar, "no_untether") == NULL)
         {
-            // Write a file only if "no_untether" is set
+            // Write a file only if "no_untether" is NOT set
             int fd = open(FILE_TO_WRITE, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
             if (fd != -1)
             {
@@ -82,10 +82,6 @@ if (nvramVar != NULL)
                 write(fd, content, strlen(content));
                 close(fd);
             }
-
-            execve(LAUNCHD, real_argv, envp);
-            fprintf(stderr, "cannot execute %s!g: %s... bailing\n", LAUNCHD, strerror(errno));
-            exit(1);
         }
     }
 
